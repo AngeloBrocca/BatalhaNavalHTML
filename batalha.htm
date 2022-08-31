@@ -1,0 +1,144 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Batalha Naval</title>
+        <link rel="stylesheet" href="botao.css">
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=L6Zv84yh1HhHzVAQZ7CRNZjdfi5zZqrsI6EittsM8K5-cgEpiTm5TuvmGIC-KDrI6QYVeHrIUji3XkFOuYErBqTW_O_GIIrEjo3CepMY_9rXdzsBCS_9BggBwlq08qPOjt6uzf5RV-B5gJPUpvmT_Xwi-AwUK3JkCaU5x5rLDn6NCQ-XmxeAJ5gID1XoZ36iQgHq5xpz7vgzL9OkDE9S7ziWETJItSG7FE1hYtPBMCIdrqQE0-IJuK0Rusr5_n5-0WHw2mhFCb8xkRxfhH-VJByUrZCYhBz_jNErlPl_32tuPd0p77Hr1LgqYSm_2q2A291r1luuwQqbvFqy6-ErCGW12W0HllIuI3UjMkyg2ereXMwnS9HkNJ61uKykYUotKLo9tYznbCmujKK3iolD0MVo14npGFDEpA_okyreN-T-qFfBz1oUhnlVGuAeDHcKqgs2sfORRsmXPskNFFbCT6DmEyPFDjajiMaIqWx7RVKaFSY7dtEuxVCdACrBZD7RYbchSVlIpQQ_xRnTea_xIcHppWtDKeZYDGVAbOmjguB0MGRhZzNXs8pd-gNE0Eadp9nZZUxvBdXVYI3CarlRS-g8AAm5xkysGpoScRyasB0D-pTx0IfKYMKEXAxKvIAN4A4HcuX976_t5FDeNZ0bCQ3Kqk1Zgd6_9efPoy5exYh5s-dJ691ec0eSvlhqUWyTAeFplpjTJCyyioliDI4yy5SHDqt-D5uAaYzkRKJ9tCuZ7YE6JMcXHzPvaMyRlOQqy1ve8_9NP0YwO1B356upa478vgtosTZZnGOG-NnouYnX1onhltDUSg9dK0eGUNDc-Dqgeenzudui5wBAnN6oyjL5zwegccaLeHuEupBGzXOR3zSSejV3AyBuRIKx0mhqwOuhEoYl2AnQ_R2kUt385qSKKuDhfD1s8AwCft3RfV6WO5rUwOkQtPfieoGyZ26cwNDdx3jB5pIYMQeDGrrbMzs4mUyCwHYWx9Aci7L4C9WEIveq-DIN6wrcYEjA_zOBM_Un4frtVRGV8nXgVfINXXh3yqoIRB_8Rm64sQ0KA3tcVdwDa___FQBGg459kojsx0CBXkZhxh-miDvsDJfoMJRvMOoGjSx9AxkSrtwsSdgqoPA562bUoFw-bXdLCClNK5RPpyX2DRU1otQ755-OBA0kWxv_J5fD-mfDG6cYgyXN3Eug996Y2f9u7bO7tME3SkDexmvo9oY3heCnCop1rG1FpD_Z6hD9zrYF8iGsbtaKxHbAQOuuZRm8sWdN3FVT9ulSKca4_YkFpWYBQw4ux34FauI16GwkRlralrZK0rJgy7J4Pm7238ztkUNjyw-gbL1L6c2q3t39HLSGUVN3kADzI0Mpb-V4h0pSWHAX2ps" nonce="e21fc7d2ea543b9f3bd0b82b7c761b89" charset="UTF-8"></script></head>
+    <body style="background-color: #EEEEEE">
+        <table width="500" border="1" cellpadding=0 cellspacing=0 align=center>
+            <tr>
+                <td colspan="10" style="text-align: center; font-size: 30px; color: blueviolet">
+                    Jogo Batalha Naval
+                </td>
+            </tr>
+            <script language="JavaScript">
+                for(i=0; i<6; i++) {
+                    document.write("<tr>");
+                    for(j=0; j<10; j++) {
+                        document.write(`<td><img src='Images/back.jpg' id='tile${i}${j}' onclick='shipOnClick(${i}, ${j})'></td>`);
+                    }
+                    document.write("</tr>");
+                }
+            </script>
+            <tr>
+                <td colspan="5" style="text-align: center; font-size: 30px; color: blueviolet">
+                    <div id="scoreboard_view_score">Pontos: 0</div>
+                </td>
+                <td colspan="5" style="text-align: center; font-size: 30px; color: blueviolet">
+                    <div id="scoreboard_view_lifes">Vidas: 3</div>
+                </td>
+            </tr>
+        </table>
+        <script language="JavaScript">
+            var life;
+            var score;
+            var endGame;
+//            água => 0
+//            submarino => 1 (7 pontos)
+//            navio de guerra => 3 (6 pontos)
+//            porta aviões => 3 (9 pontos)
+            var grid = [
+                [0, 0, 1, 0, 0, 3, 0, 0, 1, 0],
+                [0, 3, 0, 0, 0, 1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 2, 0, 0, 1, 0, 0],
+                [0, 1, 0, 0, 0, 0, 2, 0, 0, 0],
+                [0, 0, 0, 1, 0, 0, 0, 0, 3, 0],
+                [0, 2, 0, 0, 2, 0, 0, 1, 0, 0]
+            ];
+            
+            function initGame() {
+                
+                life = 3;
+                score = 0;
+                endGame = false;
+                shuffle();
+            }
+            
+            function shuffle() {
+                
+                for (i=0; i<1000; i++) {
+                    i1 = Math.floor(Math.random() * 6);
+                    j1 = Math.floor(Math.random() * 10);
+                    i2 = Math.floor(Math.random() * 6);
+                    j2 = Math.floor(Math.random() * 10);
+                    aux = grid[i1][j1];
+                    grid[i1][j1] = grid[i2][j2];
+                    grid[i2][j2] = aux;
+                }
+//                view_ships();
+            }
+            
+            function shipOnClick(row, col) {
+                
+                if (endGame) return;
+                
+                image = document.getElementById(`tile${row}${col}`);
+                tile = grid[row][col];
+                image.src = getTileImage(tile);
+                
+                score += tile;
+                if (tile == 0) {
+                    life--;
+                    if (life == 0) {
+                        alert('O jogo acabou!!! BOOOOMMMMM!!!');
+                        endGame = true;
+                    }
+                }
+                
+                scoreboard_view();
+            }
+            
+            function view_ships() {
+                for(i=0; i<6; i++) {
+                    for(j=0; j<10; j++) {
+                        tile = grid[i][j];
+                        image = document.getElementById(`tile${i}${j}`)
+                        image.src = getTileImage(tile);
+                    }
+                }
+            }
+            
+            function getTileImage(tile) {
+                switch (tile) {
+                    case 0:
+                        return "images/agua.jpg";
+                        break;
+                    case 1:
+                        return "images/submarino.jpg";
+                        break;
+                    case 2:
+                        return "images/navio_de_guerra.jpg";
+                        break;
+                    case 3:
+                        return "images/porta_avioes.jpg";
+                        break;
+                }
+            }
+            
+            function scoreboard_view() {
+                scoreboard_view_score = document.getElementById("scoreboard_view_score");
+                scoreboard_view_lifes = document.getElementById("scoreboard_view_lifes");
+                scoreboard_view_score.innerHTML = `Pontos: ${score}`;
+                scoreboard_view_lifes.innerHTML = `Vidas: ${life}`;
+            }
+            
+            initGame();
+            
+        </script>
+        <p></p>
+        <button onClick="window.location.href=window.location.href">restart</button>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
